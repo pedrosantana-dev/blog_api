@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
 </p>
@@ -72,7 +71,7 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](LICENSE).
-=======
+
 # blog_api
 Blog API com NestJS
->>>>>>> 46ae60d (Initial commit)
+>>>>>>> 46ae60d2f81bdc00f88c9bdaedeb7b91d1d78b2f
