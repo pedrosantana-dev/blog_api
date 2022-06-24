@@ -10,13 +10,13 @@ import { UserService } from '../service/user.service';
 @Controller('users')
 export class UserController {
 
-    constructor(private userService: UserService) {}
+    constructor(private userService: UserService) { }
 
     @Post()
     create(@Body() user: User): Observable<User | Object> {
         return this.userService.create(user).pipe(
             map((user: User) => user),
-            catchError(err => of({error: err.message}))
+            catchError(err => of({ error: err.message }))
         )
     }
 
@@ -24,7 +24,7 @@ export class UserController {
     login(@Body() user: User): Observable<Object> {
         return this.userService.login(user).pipe(
             map((jwt: string) => {
-                return {access_token: jwt}
+                return { access_token: jwt }
             })
         )
     }
@@ -33,11 +33,24 @@ export class UserController {
     findOne(@Param() params): Observable<User> {
         return this.userService.findOne(params.id);
     }
-   
+
     @Get()
-    index(@Query('page') page: number = 1, @Query('limit') limit: number = 10): Observable<Pagination<User>> {
+    index(
+        @Query('page') page: number = 1,
+        @Query('limit') limit: number = 10,
+        @Query('username') username: string
+    ): Observable<Pagination<User>> {
         limit = limit > 100 ? 100 : limit;
-        return this.userService.paginate({page: Number(page), limit: Number(limit), route: 'localhost:3000/users'})
+
+        if (username === null || username === undefined) {
+            return this.userService.paginate({ page: Number(page), limit: Number(limit), route: 'localhost:3000/users' })
+        } else {
+            return this.userService.paginateFilterByUsername(
+                { page: Number(page), limit: Number(limit), route: 'localhost:3000/users' },
+                { username }
+            )
+        }
+
     }
 
     @Delete(':id')
