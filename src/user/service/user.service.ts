@@ -38,7 +38,12 @@ export class UserService {
     }
 
     findOne(id: number): Observable<User> {
-        return from(this.userRepository.findOneBy({ id })).pipe(
+        return from(this.userRepository.findOne({
+            where: {
+                id: id
+            },
+            relations: ['blogEntries']
+        })).pipe(
             map((user: User) => {
                 const { password, ...result } = user;
                 return result;
@@ -71,6 +76,7 @@ export class UserService {
             take: Number(options.limit) || 10,
             order: { id: "ASC"},
             select: ["id", "name", "username", "email", "role"],
+            relations: ['blogEntries'],
             where: [
                 { username: Like(`%${user.username}%`)}
             ]

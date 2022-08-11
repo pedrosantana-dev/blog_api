@@ -13,16 +13,16 @@ export class BlogEntryEntity {
     @Column()
     slug: string;
 
-    @Column({default: ''})
+    @Column({ default: '' })
     description: string;
 
-    @Column({default: ''})
+    @Column({ default: '' })
     body: string;
 
-    @Column({type: 'timestamp', default: () => "CURRENT_TIMESTAMP"})
+    @Column({ type: 'timestamp', default: () => "CURRENT_TIMESTAMP" })
     createdAt: Date;
 
-    @Column({type: 'timestamp', default: () => "CURRENT_TIMESTAMP"})
+    @Column({ type: 'timestamp', default: () => "CURRENT_TIMESTAMP" })
     updatedAt: Date;
 
     @BeforeUpdate()
@@ -30,16 +30,16 @@ export class BlogEntryEntity {
         this.updatedAt = new Date;
     }
 
-    @Column({default: 0})
+    @Column({ default: 0 })
     likes: number;
 
-    @Column()
+    @Column({ nullable: true })
     headerImage: string;
 
-    @Column()
+    @Column({ nullable: true })
     publishedDate: Date;
 
-    @Column()
+    @Column({ nullable: true })
     isPublished: boolean;
 
     @ManyToOne(type => UserEntity, user => user.blogEntries)
