@@ -63,7 +63,7 @@ export class UserService {
     paginate(options: IPaginationOptions): Observable<Pagination<User>> {
         return from(paginate<User>(this.userRepository, options)).pipe(
             map((usersPageable: Pagination<User>) => {
-                usersPageable.items.forEach(function(v) { delete v.password });
+                usersPageable.items.forEach(function (v) { delete v.password });
 
                 return usersPageable;
             })
@@ -74,11 +74,11 @@ export class UserService {
         return from(this.userRepository.findAndCount({
             skip: options.page > 1 ? Number(options.page) * Number(options.limit) : 0,
             take: Number(options.limit) || 10,
-            order: { id: "ASC"},
+            order: { id: "ASC" },
             select: ["id", "name", "username", "email", "role"],
             relations: ['blogEntries'],
             where: [
-                { username: Like(`%${user.username}%`)}
+                { username: Like(`%${user.username}%`) }
             ]
         })).pipe(
             map(([users, totalUsers]) => {
@@ -87,7 +87,7 @@ export class UserService {
                     links: {
                         first: options.route + `?limit=${options.limit}`,
                         previous: options.route + ``,
-                        next: options.route + `?limit=${options.limit}&page=${Number(options.page)+1}`,
+                        next: options.route + `?limit=${options.limit}&page=${Number(options.page) + 1}`,
                         last: options.route + `?limit=${options.limit}&page=${Math.ceil(totalUsers / Number(options.limit))}`
                     },
                     meta: {
@@ -133,8 +133,28 @@ export class UserService {
         )
     }
 
-    validateUser(email: string, password: string): Observable<User> {
+    /* validateUser(email: string, password: string): Observable<User> {
         return this.findByMail(email).pipe(
+            switchMap((user: User) => this.authService.comparePasswords(password, user.password).pipe(
+                map((match: boolean) => {
+                    if (match) {
+                        const { password, ...result } = user;
+                        return result;
+                    } else {
+                        throw Error;
+                    }
+                })
+            ))
+        )
+    } */
+
+    validateUser(email: string, password: string): Observable<User> {
+        return from(this.userRepository.findOne({
+            where: {
+                email: email
+            },
+            select: ['id', 'password', 'name', 'username', 'email', 'role', 'profileImage']
+        })).pipe(
             switchMap((user: User) => this.authService.comparePasswords(password, user.password).pipe(
                 map((match: boolean) => {
                     if (match) {
