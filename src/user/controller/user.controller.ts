@@ -11,6 +11,7 @@ import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import path = require('path');
 import { join } from 'path';
+import { UserIsUserGuard } from 'src/auth/guards/UserIsUser.guard';
 
 export const storage = {
     storage: diskStorage({
@@ -48,6 +49,7 @@ export class UserController {
     }
 
     @Get(':id')
+    @UseGuards(JwtAuthGuard)
     findOne(@Param() params): Observable<User> {
         return this.userService.findOne(params.id);
     }
@@ -77,6 +79,7 @@ export class UserController {
     }
 
     @Put(':id')
+    @UseGuards(JwtAuthGuard, UserIsUserGuard)
     updateOne(@Param('id') id: string, @Body() user: User): Observable<any> {
         return this.userService.updateOne(Number(id), user)
     }

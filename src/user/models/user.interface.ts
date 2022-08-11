@@ -1,3 +1,4 @@
+import { BlogEntry } from "src/blog/model/blog-entry.interface";
 
 export enum UserRole {
     ADMIN = 'admin',
@@ -14,4 +15,5 @@ export interface User {
     password?: string;
     role?: UserRole;
     profileImage?: string;
+    blogEntries?: BlogEntry[];
 }

@@ -7,6 +7,7 @@ import { RolesGuard } from './guards/roles.guard';
 import { JwtAuthGuard } from './guards/jwt-guard';
 import { JwtStrategy } from './guards/jwt-strategy';
 import { UserModule } from 'src/user/user.module';
+import { BlogModule } from 'src/blog/blog.module';
 
 @Module({
     imports: [
